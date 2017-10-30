@@ -1,5 +1,7 @@
 package com.wxueyuan.DataStructure;
 
+import java.util.Arrays;
+
 import com.wxueyuan.ADT.MyList;
 
 public class MyArrayList<E> implements MyList<E>{
@@ -90,6 +92,30 @@ public class MyArrayList<E> implements MyList<E>{
 		contents[index] = element;
 		this.size++;
 	}
+	/*
+	 * 等价与上面的add(int index, E element)方法
+	 * 
+	 * System.arraycopy(contents, index, contents, index+1, size() - index);
+	 * 等价于:
+	 * for(int i=size(); i>index; i--){ 
+			contents[i] = contents[i-1];
+	   }
+	 * 
+	@Override
+	public void add(int index, E element) {
+		// TODO Auto-generated method stub
+		//一旦要插入元素的位置为负或大于目前的元素数量就抛出异常
+        //此处允许index等于size，相当于在列表末尾插入元素
+		if(index<0 || index>size())
+			throw new ArrayIndexOutOfBoundsException();
+		//在插入元素之前，检查数组是否有足够的空间放置新的元素，若没有，则对数组进行扩容
+		ensureCapacity();
+		for(int i=size(); i>index; i--) 
+			contents[i] = contents[i-1];
+		//将要插入的元素放置到index位置上去
+		contents[index] = element;
+		this.size++;
+	}*/
 
 	@Override
 	public boolean remove(Object o) {
@@ -126,6 +152,24 @@ public class MyArrayList<E> implements MyList<E>{
         //将元素数目减一并释放原来最后一位的内存
         contents[--size] = null;
 	}
+	
+	/*
+	 * 等价与上面的fastRemove(int index)方法
+	 * 
+	 * System.arraycopy(contents,index+1,contents,index,numMoved);
+	 * 等价于:
+	 * for(int i=index; i<size()-1; i++){
+			contents[i] = contents[i+1];
+	   }
+	 * 
+	private void fastRemove(int index) {
+		// TODO Auto-generated method stub
+		for(int i=index; i<size()-1; i++)
+			contents[i] = contents[i+1];
+        //将元素数目减一并释放原来最后一位的内存
+        contents[--size] = null;
+	}*/
+	
 	@Override
 	public E remove(int index) {
 		// TODO Auto-generated method stub
@@ -166,5 +210,9 @@ public class MyArrayList<E> implements MyList<E>{
 		if(index<0 || index>=size())
 			throw new ArrayIndexOutOfBoundsException();
 	}
-
+	
+	@Override
+	public String toString() {
+		return Arrays.toString(contents);
+	}
 }
