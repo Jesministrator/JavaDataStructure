@@ -3,7 +3,7 @@ package com.wxueyuan.test;
 import static org.junit.Assert.*;
 
 import org.junit.Test;
-import org.junit.experimental.categories.IncludeCategories;
+
 
 import com.wxueyuan.DataStructure.MySinglyLinkedList;
 
@@ -110,12 +110,27 @@ public class MySinglyLinkedListTest {
 
 	@Test
 	public void testGet() {
-		fail("Not yet implemented");
+		MySinglyLinkedList<Integer> list = new MySinglyLinkedList<>();
+		list.add(100);
+		list.add(0,200);
+		list.add(1, 300);
+		list.add(400);
+		list.add(500);
+		list.add(3,600);
+		assertEquals(list.get(3),new Integer(600));
 	}
 
 	@Test
 	public void testSet() {
-		fail("Not yet implemented");
+		MySinglyLinkedList<Integer> list = new MySinglyLinkedList<>();
+		list.add(100);
+		list.add(0,200);
+		list.add(1, 300);
+		list.add(400);
+		list.add(500);
+		list.add(3,600);
+		list.set(2, new Integer(1000));
+		assertEquals("[200, 300, 1000, 600, 400, 500]",list.toString());
 	}
 
 }
