@@ -4,37 +4,25 @@ import com.wxueyuan.ADT.MyList;
 
 public class MyDoublyLinkedList<E> implements MyList<E> {
 	
-	//双链表中的首标记节点,此节点不存放元素，前驱结点指向null，后继节点指向链表中的第一个元素节点
-	private Node firstFlagNode;
-	//双链表中的尾标记节点,此节点不存放元素，后继结点指向null，前驱节点指向链表中的最后一个元素节点
-	private Node lastFlagNode;
-	//双链表中元素的数量
 	private int size;
+	private Node headNode;
+	private Node tailNode;
 	
 	public MyDoublyLinkedList() {
-		firstFlagNode = new Node (null,null,null);
-		//首标记节点的后继指向尾标记节点，尾标记节点的前驱指向首标记节点
-		lastFlagNode = new Node (null,firstFlagNode,null);
-		firstFlagNode.nextNode = lastFlagNode;
-		size = 0;
-	}
-
-	//内部类Node，用来表示双链表中每一个数据元素
-	class Node{
-		//数据域
-		E data;
-		//前驱指针域，指向该节点的前一个节点
-		Node prevNode;
-		//后继指针域，指向该节点的后一个节点
-		Node nextNode;
-		public Node(E data, Node prevNode, Node nextNode) {
-			this.data = data;
-			this.prevNode = prevNode;
-			this.nextNode = nextNode;
-		}
 		
 	}
 
+	class Node{
+		Node prev;
+		Node next;
+		E data;
+		Node (Node prev, Node next, E data){
+			this.prev = prev;
+			this.next = next;
+			this.data = data;
+		}
+	}
+	
 	@Override
 	public int size() {
 		// TODO Auto-generated method stub
@@ -44,177 +32,174 @@ public class MyDoublyLinkedList<E> implements MyList<E> {
 	@Override
 	public boolean isEmpty() {
 		// TODO Auto-generated method stub
-		return size()==0;
+		return this.size==0;
 	}
 
 	@Override
 	public boolean contains(Object o) {
 		// TODO Auto-generated method stub
-		if(o == null) {
-			for(Node n = firstFlagNode.nextNode; n!=null&&n!=lastFlagNode; n = n.nextNode) {
-				if(n.data == null) {
+		if(o==null) {
+			for(Node n= headNode; n!=null; n=n.next) {
+				if(n.data==null)
 					return true;
-				}
 			}
-			return false;
 		}else {
-			for(Node n = firstFlagNode.nextNode; n!=null&&n!=lastFlagNode; n = n.nextNode) {
-				if(o.equals(n.data)) {
+			for(Node n = headNode; n!=null; n = n.next) {
+				if(o.equals(n.data))
 					return true;
-				}
 			}
-			return false;
+		}
+		return false;
+	}
+	private Node getNodeById(int index) {
+		
+		if(index<size()/2) {
+			Node n = headNode;
+			for(int i=0; i<index ; i++) {
+				n = n.next;
+			}
+			return n;
+		}else {
+			Node n = tailNode;
+			for(int i=size()-1; i>index; i--) {
+				n = n.prev;
+			}
+			return n;
 		}
 	}
-
+	
+	
+	
 	@Override
 	public boolean add(E e) {
-		// TODO Auto-generated method stub
-		add(size(),e);
+		Node n = tailNode;
+		Node newNode = new Node(n,null,e);
+		tailNode = newNode;
+		if(n==null) {
+			headNode = newNode;
+		}else {
+			n.next = newNode;
+		}
+		size++;
 		return true;
 	}
-
+	
 	@Override
 	public void add(int index, E element) {
 		// TODO Auto-generated method stub
-		//当index=0时，相当于在第一个位置插入元素，当index=size时相当于在链表末尾插入一个元素
-		if(index<0 || index>size())
-			throw new IndexOutOfBoundsException();
-		Node newNode = new Node(element,null,null);
-		Node n = getPrevNodeByIndex(index);
-		//在它之后插入新的节点
-		n.nextNode.prevNode = newNode;
-		newNode.prevNode = n;
-		newNode.nextNode = n.nextNode;
-		n.nextNode = newNode;
-		this.size++;
-		return;
+		if(index<0 || index>size()) throw new IndexOutOfBoundsException();
+		if(index == size) 
+			add(element);
+		else {
+			Node n = getNodeById(index);
+			Node newNode = new Node(n.prev,n,element);
+			if(n.prev == null) {
+				headNode = newNode;
+				n.prev = newNode;
+			}else {
+				n.prev.next = newNode;
+				n.prev = newNode;
+			}
+			size++;
+		}
 	}
-	//私有方法获取当前index位置的前一个节点
-	private Node getPrevNodeByIndex(int index) {
-		//双链表能够从前后两个方向遍历，根据index的大小选择方向遍历
-		Node n = null;
-		if(index<size()/2) {
-			n = firstFlagNode;
-			for(int i=0; i<index; i++) {
-				n = n.nextNode;
-			}
+	private void fastRemove(Node n) {
+		Node prev = n.prev;
+		Node next = n.next;
+		if(prev == null) {
+			headNode = next;
 		}else {
-			n = lastFlagNode;
-			for(int i = size(); i>=index; i--) {
-				n = n.prevNode;
-			}
+			prev.next = next;
+			n.prev = null;
 		}
 		
-		return n;
+		if(next == null) {
+			tailNode = prev;
+		}else {
+			next.prev = prev;
+			n.next = null;
+		}
+		n.data = null;
+		size--;
 	}
-	
-
 	@Override
 	public boolean remove(Object o) {
 		// TODO Auto-generated method stub
 		if(o == null) {
-			for(Node n = firstFlagNode.nextNode; n!=null&&n!=lastFlagNode; n = n.nextNode) {
-				if(n.data == null) {
-					//删除本节点
-					n.prevNode.nextNode = n.nextNode;
-					n.nextNode.prevNode = n.prevNode;
-					//清空旧节点的数据域与指针域，方便GC工作
-					n.data = null;
-					n.nextNode = null;
-					n.prevNode = null;
-					n = null;
-					this.size--;
+			for(Node n = headNode; n!=null; n=n.next) {
+				if(n.data==null) {
+					fastRemove(n);
 					return true;
 				}
 			}
-			return false;
 		}else {
-			for(Node n = firstFlagNode.nextNode; n!=null&&n!=lastFlagNode; n = n.nextNode) {
-				if(o.equals(n.data)) {
-					//删除本节点
-					n.prevNode.nextNode = n.nextNode;
-					n.nextNode.prevNode = n.prevNode;
-					//清空旧节点的数据域与指针域，方便GC工作
-					n.data = null;
-					n.nextNode = null;
-					n.prevNode = null;
-					n = null;
-					this.size--;
+			for(Node n = tailNode; n!=null; n=n.prev) {
+				if(o.equals(n.data)){
+					fastRemove(n);
 					return true;
 				}
 			}
-			return false;
 		}
+		return false;
 	}
 
 	@Override
 	public E remove(int index) {
 		// TODO Auto-generated method stub
-		//检查index的边界
-		checkIndexValidation(index);
-		//获取index位置的节点
-		Node targetNode = getPrevNodeByIndex(index).nextNode;
-		E oldElement = targetNode.data;
-		//旧节点的前驱节点指向旧节点的后继节点，旧节点的后继节点指向旧节点的前驱节点
-		targetNode.prevNode.nextNode = targetNode.nextNode;
-		targetNode.nextNode.prevNode = targetNode.prevNode;
-		//清空旧节点的数据域与指针域，方便GC工作
-		targetNode.data = null;
-		targetNode.nextNode = null;
-		targetNode.prevNode = null;
-		targetNode = null;
-		this.size--;
-		return oldElement;
+		checkBounds(index);
+		Node n = getNodeById(index);
+		E data = n.data;
+		fastRemove(n);
+		return data;
 	}
-	
-	private void checkIndexValidation(int index) {
-		if(index<0 || index>=size())
-			throw new ArrayIndexOutOfBoundsException();
-	}
-	
 
 	@Override
 	public void clear() {
 		// TODO Auto-generated method stub
-		for(Node n = firstFlagNode.nextNode; n!=null&&n!=lastFlagNode; ) {
-			Node next = n.nextNode;
+		for(Node n = headNode; n!=null;) {
+			Node next = n.next;
+			n.prev = null;
+			n.next = null;
 			n.data = null;
-			n.nextNode = null;
-			n.prevNode = null;
 			n = next;
 		}
-		firstFlagNode.nextNode = lastFlagNode;
-		lastFlagNode.prevNode = firstFlagNode;
+		headNode = null;
+		tailNode = null;
 		this.size = 0;
 	}
 
+	private void checkBounds(int index) {
+		if(index<0 || index>=size()) throw new IndexOutOfBoundsException();
+	}
+	
 	@Override
 	public E get(int index) {
 		// TODO Auto-generated method stub
-		checkIndexValidation(index);
-		return getPrevNodeByIndex(index).nextNode.data;
+		checkBounds(index);
+		return getNodeById(index).data;
 	}
 
 	@Override
 	public E set(int index, E element) {
 		// TODO Auto-generated method stub
-		checkIndexValidation(index);
-		Node targetNode = getPrevNodeByIndex(index).nextNode;
-		E data = targetNode.data;
-		targetNode.data = element;
+		checkBounds(index);
+		Node n = getNodeById(index);
+		E data = n.data;
+		n.data = element;
 		return data;
 	}
-	@Override
+	
+	@Override 
 	public String toString() {
 		StringBuilder sb = new StringBuilder("[");
-		for(Node n= firstFlagNode.nextNode; n!=null&&n!=lastFlagNode; n = n.nextNode) {
-			sb.append(n.data);
-			if(n.nextNode!=lastFlagNode)
-				sb.append(", ");
+		for(Node n = headNode;n!=null;n=n.next) {
+			if(n.next!=null)
+				sb.append(n.data.toString()+", ");
+			else
+				sb.append(n.data.toString());
 		}
 		sb.append("]");
 		return sb.toString();
 	}
-
+	
 }

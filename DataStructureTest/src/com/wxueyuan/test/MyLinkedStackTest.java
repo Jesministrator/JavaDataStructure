@@ -88,8 +88,10 @@ public class MyLinkedStackTest {
 		stack.push(2);
 		stack.push(3);
 		stack.push(null);
+		System.out.println(stack);
 		assertEquals(1, stack.search(null));
 		stack.pop();
+		
 		assertEquals(-1, stack.search(null));
 		assertEquals(3, stack.search(new Integer(1)));
 		stack.clear();

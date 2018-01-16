@@ -45,11 +45,13 @@ public class MyDoublyLinkedListTest {
 	public void testAddE() {
 		MyDoublyLinkedList<Integer> list = new MyDoublyLinkedList<>();
 		list.add(100);
-		list.add(0,200);
-		list.add(1, 300);
+		list.add(200);
+		list.add(300);
+		list.add(2,600);
 		list.add(400);
 		list.add(500);
-		assertEquals("[200, 300, 100, 400, 500]", list.toString());
+		
+		assertEquals("[100, 200, 600, 300, 400, 500]", list.toString());
 	}
 
 	@Test
@@ -57,11 +59,12 @@ public class MyDoublyLinkedListTest {
 		MyDoublyLinkedList<Integer> list = new MyDoublyLinkedList<>();
 		list.add(100);
 		list.add(0,200);
-		list.add(1, 300);
-		list.add(400);
+		list.add(1,300);
+		list.add(3,400);
 		list.add(500);
-		list.add(3,600);
-		assertEquals("[200, 300, 100, 600, 400, 500]", list.toString());
+		list.add(2,700);
+		
+		assertEquals("[200, 300, 700, 100, 400, 500]", list.toString());
 	}
 
 	@Test
