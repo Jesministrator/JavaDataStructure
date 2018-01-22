@@ -6,7 +6,8 @@ public class KMP {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		System.out.println(indexOfSubStringKMP("Xgoogleggggoogle","google"));
+		System.out.println(indexOfSubStringKMP("BBC ABCDABBABCDABCDABDE","ABCDABD"));
+		System.out.println(Arrays.toString(getNext("ABCDABD")));
 	}
 	
 	public static int indexOfSubString(String target,String sub){
@@ -29,10 +30,10 @@ public class KMP {
 	public static int indexOfSubStringKMP(String target,String sub){
 		int i=0;
 		int j=0;
-		int[] next = getNext(sub);
+		int[] next = getNextVal(sub);
 		System.out.println(Arrays.toString(next));
 		while(i<target.length() && j<sub.length()){
-			if(j==0 || target.charAt(i)==sub.charAt(j)){
+			if(j==-1 || target.charAt(i)==sub.charAt(j)){
 				i++;
 				j++;
 			}else{
@@ -44,18 +45,40 @@ public class KMP {
 		return -1;
 	}
 	
-	//根据字符串s获取next数组
+	
 	private static int[] getNext(String s){
-		//next下标需要从1开始，因此声明长度时需要为length+1
-		int next[] = new int[s.length()+1];
-		int j=0;
-		int i=1;
-		next[1] = 0;
-		while(i<s.length()){
-			if(j==0 || s.charAt(i-1)==s.charAt(j-1)){
+		int next[] = new int[s.length()];
+		int j=-1;
+		int i=0;
+		next[0] = -1;
+		while(i<s.length()-1){
+			if(j==-1 || s.charAt(i)==s.charAt(j)){
 				++i;
 				++j;
 				next[i]=j;
+			}
+			else{
+				j=next[j];
+			}
+		}
+		return next;
+	}
+	
+	private static int[] getNextVal(String s) {
+		int next[] = new int[s.length()];
+		int j=-1;
+		int i=0;
+		next[0] = -1;
+		while(i<s.length()-1){
+			if(j==-1 || s.charAt(i)==s.charAt(j)){
+				++i;
+				++j;
+				if(s.charAt(i)!=s.charAt(j)) {
+					next[i]=j;
+				}else {
+					next[i]=next[j];
+				}
+				
 			}
 			else{
 				j=next[j];
