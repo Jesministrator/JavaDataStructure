@@ -15,6 +15,10 @@ public class MyBinaryTree<E> {
 		
 	}
 	
+	public Node root(){
+		return this.root;
+	}
+	
 	//在整个二叉树中不允许插入空值
 	private void checkValueNull(E v) {
 		if(v==null) throw new IllegalArgumentException();
@@ -189,13 +193,121 @@ public class MyBinaryTree<E> {
 	
 	public int depth(E v) {
 		Node current = getNodeByValue(v);
-		if(current==null) return 0;
-		return Math.max(depth(current.left.data),depth(current.right.data)) + 1;
+		return depth(current);
 	}
 	
-	/*private int depth(Node n) {
-		
-	}*/
+	private int depth(Node n) {
+		if(n==null) return 0;
+		return Math.max(depth(n.left),depth(n.right))+1;
+	}
+	
+	public int minDepth(E v){
+		Node current = getNodeByValue(v);
+		return minDepth(current);
+	}
+	
+	private int minDepth(Node n){
+		if(n==null) return Integer.MAX_VALUE;
+		if(n.left==null && n.right==null){
+			return 1;
+		}
+		return Math.min(minDepth(n.left),minDepth(n.right))+1;
+	}
+	
+	public int numOfNodes(E v){
+		Node current = getNodeByValue(v);
+		return numOfNodes(current);
+	}
+	
+	private int numOfNodes(Node n){
+		if(n==null) return 0;
+		return numOfNodes(n.left)+numOfNodes(n.right)+1;
+	}
+	
+	public int numOfLeafNodes(){
+		return leafNodes(root);
+	}
+	
+	private int leafNodes(Node n){
+		if(n==null) return 0;
+		if(n.left==null && n.right==null) return 1;
+		return leafNodes(n.left)+leafNodes(n.right);
+	}
+	
+	public int numOfLevelNodes(int level){
+		if(level<=0) throw new IllegalArgumentException();
+		return numOfLevelNodes(root,level);
+	}
+	
+	private int numOfLevelNodes(Node n, int level){
+		if(n==null) return 0;
+		if(level==1) return 1;
+		return numOfLevelNodes(n.left,level-1)+numOfLevelNodes(n.right,level-1);
+	}
+	
+	public boolean isCompleteBinaryTree(){
+		if(root==null) return false;
+		Queue<Node> queue = new LinkedList<MyBinaryTree<E>.Node>();
+		boolean result = true;
+		boolean noChild = false;
+		queue.add(root);
+		while(!queue.isEmpty()){
+			//取出队列的第一个元素
+			Node current = queue.remove();
+			//如果当前元素没有子节点
+			if(noChild){
+				//如果队列中的下一个节点有孩子则说明不是完全二叉树
+				if(current.left!=null || current.right!=null){
+					result = false;
+					break;
+				}
+			}else{
+				//左右子节点均不为空
+				if(current.left!=null && current.right!=null){
+					queue.add(current.left);
+					queue.add(current.right);
+				}else if(current.left!=null && current.right==null){
+					//如果左节点不为空但右节点为空，则将noChild标识置为true，由此来检查队列中下一个元素是否有孩子
+					queue.add(current.left);
+					noChild = true;
+				}else if(current.left==null && current.right!=null){
+					//如果左节点为空但右节点不为空，则跳出循环，该树一定不是完全二叉树
+					result = false;
+					break;
+				}else{
+					//如果左右节点都为空，则将noChild标识置为true
+					noChild = true;
+				}
+			}
+		}
+		return result;
+	}
+	
+	public boolean isSameTree(MyBinaryTree<E> tree){
+		return isSameTree(root(),tree.root());
+	}
+	
+	private boolean isSameTree(Node root1, Node root2){
+		if(root1==null && root2==null) return true;
+		else if(root1==null || root2==null) return false;
+		if(!root1.data.equals(root2.data)) return false;
+		boolean leftResult = isSameTree(root1.left,root2.left);
+		boolean rightResult = isSameTree(root1.right,root2.right);
+		return leftResult&&rightResult;
+	}
+	
+	public boolean isMirror(MyBinaryTree<E> tree){
+		return isMirror(root,tree.root);
+	}
+	
+	private boolean isMirror(Node root1,Node root2){
+		if(root1==null && root2==null) return true;
+		else if(root1==null || root2==null) return false;
+		if(!root1.data.equals(root2.data)) return false;
+		boolean leftResult = isMirror(root1.left,root2.right);
+		boolean rightResult = isMirror(root1.right, root1.left);
+		return leftResult&&rightResult;
+	}
 	
 	public List<E> levelOrderTraverse(E v) {
         List<E> list = new ArrayList<>();
@@ -203,13 +315,10 @@ public class MyBinaryTree<E> {
         if (current == null) {
             return list;
         }
-
         int depth = depth(v);
-
         for (int i = 1; i <= depth; i++) {
             levelOrder(current, i, list);
         }
-        
         return list;
     }
 
@@ -217,15 +326,12 @@ public class MyBinaryTree<E> {
         if (n == null || level < 1) {
             return;
         }
-
         if (level == 1) {
             list.add(n.data);
             return;
         }
-
         // 左子树
         levelOrder(n.left, level - 1,list);
-
         // 右子树
         levelOrder(n.right, level - 1,list);
     }
