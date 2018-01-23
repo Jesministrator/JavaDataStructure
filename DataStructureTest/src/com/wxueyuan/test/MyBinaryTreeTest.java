@@ -72,9 +72,8 @@ public class MyBinaryTreeTest {
 		
 		MyBinaryTree<String> t3 = new MyBinaryTree<>();
 		t3.insert(null, "A", null);
-		t3.insert("A", "C", Child.LEFT);
 		t3.insert("A", "B", Child.RIGHT);
-		
+		t3.insert("A", "C", Child.LEFT);
 		t3.insert("B", "D", Child.RIGHT);
 		t3.insert("D", "G", Child.RIGHT);
 		t3.insert("D", "H", Child.LEFT);
@@ -83,8 +82,26 @@ public class MyBinaryTreeTest {
 		t3.insert("E", "I", Child.LEFT);
 		assertEquals(true, t.isSameTree(t2));
 		assertEquals(false, t.isMirror(t2));
-		assertEquals(false, t.isMirror(t3));
+		assertEquals(true, t2.isMirror(t3));
 		//assertEquals(false, t.sameTree(t3));
+		
+		t.mirrorTheTree();
+		System.out.println("after the mirror operation");
+		System.out.println("preOrder+Recursion"+Arrays.toString(t.preOrderTraverse(null).toArray()));
+		System.out.println("preOrder+NonRecursion"+Arrays.toString(t.preOrderNonRecursion(null).toArray()));
+		System.out.println("inOrder+Recursion"+Arrays.toString(t.inOrderRecursion(null).toArray()));
+		System.out.println("inOrder+NonRecursion"+Arrays.toString(t.inOrderNonRecursion(null).toArray()));
+		System.out.println("postOrder+Recursion"+Arrays.toString(t.postOrderTraverse(null).toArray()));
+		System.out.println("postOrder+NonRecursion"+Arrays.toString(t.postOrderNonRecursion(null).toArray()));
+		System.out.println("levelOrder+Recursion"+Arrays.toString(t.levelOrderTraverse(null).toArray()));
+		System.out.println("levelOrder+NonRecursion"+Arrays.toString(t.levelOrderNonRecursion(null).toArray()));
+		
+		t.mirrorTheTree();
+		
+		assertEquals("A", t.lowestPublicParent("H", "I"));
+		assertEquals("D", t.lowestPublicParent("G", "H"));
+		assertEquals("C", t.lowestPublicParent("E", "F"));
+		assertEquals("A", t.lowestPublicParent("D", "E"));
 	}
 
 	@Test

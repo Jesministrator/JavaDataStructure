@@ -305,9 +305,60 @@ public class MyBinaryTree<E> {
 		else if(root1==null || root2==null) return false;
 		if(!root1.data.equals(root2.data)) return false;
 		boolean leftResult = isMirror(root1.left,root2.right);
-		boolean rightResult = isMirror(root1.right, root1.left);
+		boolean rightResult = isMirror(root1.right, root2.left);
 		return leftResult&&rightResult;
 	}
+	
+	public void mirrorTheTree() {
+		mirrorTheTree(root);
+	}
+	
+	private Node mirrorTheTree(Node n) {
+		if(n==null) return null;
+		Node left = mirrorTheTree(n.left);
+		Node right = mirrorTheTree(n.right);
+		n.left = right;
+		n.right = left;
+		return n;
+	}
+	
+	public E lowestPublicParent(E v1, E v2) {
+		Node n1 = getNodeByValue(v1);
+		Node n2 = getNodeByValue(v2);
+		return lowestPublicParent(root,n1, n2).data;
+	}
+	
+	private Node lowestPublicParent(Node root, Node t1, Node t2) {
+		if(findNode(root.left,t1)){
+            if(findNode(root.right,t2)){
+                return root;
+            }else{
+                return lowestPublicParent(root.left,t1,t2);
+            }
+        }else{
+            if(findNode(root.left,t2)){
+                return root;
+            }else{
+                return lowestPublicParent(root.right,t1,t2);
+            }
+        }
+	}
+	
+	private boolean findNode(Node root,Node node){
+        if(root == null || node == null){
+            return false;
+        }
+        if(root == node){
+            return true;
+        }
+        boolean found = findNode(root.left,node);
+        if(!found){
+            found = findNode(root.right,node);
+        }
+        return found;
+    }
+
+	
 	
 	public List<E> levelOrderTraverse(E v) {
         List<E> list = new ArrayList<>();
