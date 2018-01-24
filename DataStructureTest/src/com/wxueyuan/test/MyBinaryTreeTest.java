@@ -31,13 +31,17 @@ public class MyBinaryTreeTest {
 		assertEquals(true,t.contains("D"));*/
 		System.out.println("preOrder+Recursion"+Arrays.toString(t.preOrderTraverse(null).toArray()));
 		System.out.println("preOrder+NonRecursion"+Arrays.toString(t.preOrderNonRecursion(null).toArray()));
-		System.out.println("Moris+NonRecursion"+Arrays.toString(t.Morris_PreOrder(null).toArray()));
+		System.out.println("preOrder+Moris"+Arrays.toString(t.Morris_PreOrder(null).toArray()));
 		assertEquals(Arrays.toString(t.preOrderNonRecursion(null).toArray()),Arrays.toString(t.preOrderNonRecursion2(null).toArray()));
 		assertEquals(Arrays.toString(t.preOrderNonRecursion(null).toArray()),Arrays.toString(t.Morris_PreOrder(null).toArray()));
 		System.out.println("inOrder+Recursion"+Arrays.toString(t.inOrderRecursion(null).toArray()));
 		System.out.println("inOrder+NonRecursion"+Arrays.toString(t.inOrderNonRecursion(null).toArray()));
+		System.out.println("inOrder+Moris"+Arrays.toString(t.inOrderMoris(null).toArray()));
+		assertEquals(Arrays.toString(t.inOrderNonRecursion(null).toArray()),Arrays.toString(t.inOrderMoris(null).toArray()));
 		System.out.println("postOrder+Recursion"+Arrays.toString(t.postOrderTraverse(null).toArray()));
 		System.out.println("postOrder+NonRecursion"+Arrays.toString(t.postOrderNonRecursion(null).toArray()));
+		System.out.println("postOrder+Moris"+Arrays.toString(t.postOrderMoris(null).toArray()));
+		assertEquals(Arrays.toString(t.postOrderNonRecursion(null).toArray()),Arrays.toString(t.postOrderMoris(null).toArray()));
 		System.out.println("levelOrder+Recursion"+Arrays.toString(t.levelOrderTraverse(null).toArray()));
 		System.out.println("levelOrder+NonRecursion"+Arrays.toString(t.levelOrderNonRecursion(null).toArray()));
 		assertEquals(Arrays.toString(t.levelOrderTraverse(null).toArray()),Arrays.toString(t.levelOrderNonRecursion(null).toArray()));

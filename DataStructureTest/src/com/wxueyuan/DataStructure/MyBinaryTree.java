@@ -195,13 +195,38 @@ public class MyBinaryTree<E> {
 		return list;
 	}
 	
+	public List<E> inOrderMoris(E parentValue){
+		List<E> list = new ArrayList<>();
+		Node current = getNodeByValue(parentValue);
+		if(current==null) return list;
+		while(current!=null){
+			if(current.left==null){
+				list.add(current.data);
+				current = current.right;
+			}else{
+				Node tmp = current.left;
+				while(tmp.right!=null&&tmp.right!=current){
+					tmp = tmp.right;
+				}
+				if(tmp.right==null){
+					tmp.right = current;
+					current = current.left;
+				}else{
+					list.add(current.data);
+					tmp.right = null;
+					current = current.right;
+				}
+			}
+		}
+		return list;
+	}
+	
 	public List<E> postOrderTraverse(E currentValue){
 		List<E> list = new ArrayList<>();
 		Node current = getNodeByValue(currentValue);
 		postOrderRecursion(current,list);
 		return list;
 	}
-
 
 	private void postOrderRecursion(MyBinaryTree<E>.Node current, List<E> list) {
 		// TODO Auto-generated method stub
@@ -242,6 +267,54 @@ public class MyBinaryTree<E> {
 		return list;
 	}
 	
+	public List<E> postOrderMoris(E parentValue){
+		List<E> list = new ArrayList<>();
+		Node parent = getNodeByValue(parentValue);
+		if(parent==null) return list;
+		Node tmpRoot = new Node(parent,null,null);
+		Node current = tmpRoot;
+		while(current!=null){
+			if(current.left==null){
+				current=current.right;
+			}else{
+				Node tmp = current.left;
+				while(tmp.right!=null&&tmp.right!=current){
+					tmp = tmp.right;
+				}
+				if(tmp.right==null){
+					tmp.right = current;
+					current = current.left;
+				}else{
+					reverseLinkedList(current.left,tmp);
+					Node n = tmp;
+					while(n!=current.left){
+						list.add(n.data);
+						n=n.right;
+					}
+					list.add(n.data);
+					reverseLinkedList(tmp,current.left);
+					tmp.right = null;
+					current = current.right;
+				}
+			}
+		}		
+		return list;
+	}
+	private void reverseLinkedList(Node start,Node end) {
+		// TODO Auto-generated method stub
+		if(start==end)
+			return;
+		Node pre = start;
+		Node current = start.right;
+		Node next;
+		while(pre!=end){
+			next = current.right;
+			current.right = pre;
+			pre = current;
+			current = next;
+		}
+	}
+
 	public int depth(E v) {
 		Node current = getNodeByValue(v);
 		return depth(current);
