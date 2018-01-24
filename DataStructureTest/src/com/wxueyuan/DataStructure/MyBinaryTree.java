@@ -25,20 +25,22 @@ public class MyBinaryTree<E> {
 	}
 	//对于使用数据结构的人来说，他们没法传入node类型的参数，因此需要提供方法根据值来获得Node
 	private Node getNodeByValue(E v) {
-		if(v==null) return this.root;
+		if(v==null) return this.root;  //传入v为null返回root节点
 		Node n=preOrderTraverseNode(this.root,v);
 		return n;
 	}
-	//以前序遍历返回一个带有v值的Node
 	private Node preOrderTraverseNode(Node root,E v) {
 		Stack<Node> s = new Stack<>();
 		s.push(root);
 		Node n = null;
+		boolean found = false;
 		while(!s.isEmpty()) {
 			//弹出root
 			 n = s.pop();
-			 if(n.data.equals(v))
+			 if(n.data.equals(v)) {
+				 found = true;
 				 break;
+			 }
 			//先压入右节点再压入左节点，这样下次左节点后就开始对左节点的左右儿子进行操作了 
 			if(n.right!=null) {
 				s.push(n.right);
@@ -47,7 +49,10 @@ public class MyBinaryTree<E> {
 				s.push(n.left);
 			}
 		}
-		return n;
+		if(found)
+			return n;
+		else
+			return null;
 	}
 	
 	public boolean insert(E parentValue,E newValue,Child c) {
@@ -61,7 +66,7 @@ public class MyBinaryTree<E> {
 			this.root = newNode;
 		}else {
 			Node parent = getNodeByValue(parentValue);
-			if(!contains(parentValue)) return false;
+			if(parent==null) return false;
 			if(Child.LEFT.equals(c)) {
 				newNode.left = parent.left;
 				parent.left = newNode;
@@ -90,6 +95,52 @@ public class MyBinaryTree<E> {
 		list.add(parent.data);
 		preOrderRecursion(parent.left, list);
 		preOrderRecursion(parent.right, list);
+	}
+	public List<E> Morris_PreOrder(E parentValue) {  
+	    List<E> res = new ArrayList<>();  
+	    Node root = getNodeByValue(parentValue);
+	    if(root == null)  
+	        return res;  
+	    Node cur = root;  
+	    while(cur != null) {  
+	        if(cur.left == null) {  
+	            res.add(cur.data);  
+	            cur = cur.right;  
+	        } else {  
+	            Node tmp = cur.left;  
+	            while(tmp.right != null && tmp.right != cur)  
+	                tmp = tmp.right;  
+	            if(tmp.right == null) {  
+	                res.add(cur.data); //输出当前节点  
+	                tmp.right = cur;  //找到当前节点的前驱节点  
+	                cur = cur.left;  
+	            } else {  
+	                tmp.right = null;  //恢复二叉树  
+	                cur = cur.right;  
+	            }  
+	        }  
+	    }  
+	    return res;  
+	}
+	
+	public List<E> preOrderNonRecursion2(E parentValue){
+		List<E> list = new ArrayList<>();
+		Node current= getNodeByValue(parentValue);
+		Stack<Node> s = new Stack<>();
+		if(current==null) return list;
+		while(current!=null || !s.isEmpty()) {
+			if(current!=null) {
+				s.push(current);
+				list.add(current.data);
+				current = current.left;
+			}else {
+				//如果当前节点的左孩子为空，就跳回到父节点,并从栈中删除父节点
+				current = s.pop();
+				//使当前节点等于父节点的右孩子
+				current = current.right;
+			}
+		}
+		return list;
 	}
 	public List<E> preOrderNonRecursion(E parentValue) {
 		List<E> list = new ArrayList<>();

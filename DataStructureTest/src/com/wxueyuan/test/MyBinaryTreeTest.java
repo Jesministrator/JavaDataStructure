@@ -11,19 +11,7 @@ import com.wxueyuan.DataStructure.MyBinaryTree;
 
 public class MyBinaryTreeTest {
 
-	@Test
-	public void testInsert() {
-		MyBinaryTree<String> t = new MyBinaryTree<>();
-		t.insert(null, "A", null);
-		t.insert("A", "B", Child.LEFT);
-		t.insert("A", "C", Child.RIGHT);
-		t.insert("B", "D", Child.LEFT);
-		t.insert("D", "G", Child.LEFT);
-		t.insert("D", "H", Child.RIGHT);
-		t.insert("C", "E", Child.LEFT);
-		t.insert("C", "F", Child.RIGHT);
-		t.insert("E", "I", Child.RIGHT);
-	}
+
 
 	@Test
 	public void testContains() {
@@ -43,6 +31,9 @@ public class MyBinaryTreeTest {
 		assertEquals(true,t.contains("D"));*/
 		System.out.println("preOrder+Recursion"+Arrays.toString(t.preOrderTraverse(null).toArray()));
 		System.out.println("preOrder+NonRecursion"+Arrays.toString(t.preOrderNonRecursion(null).toArray()));
+		System.out.println("Moris+NonRecursion"+Arrays.toString(t.Morris_PreOrder(null).toArray()));
+		assertEquals(Arrays.toString(t.preOrderNonRecursion(null).toArray()),Arrays.toString(t.preOrderNonRecursion2(null).toArray()));
+		assertEquals(Arrays.toString(t.preOrderNonRecursion(null).toArray()),Arrays.toString(t.Morris_PreOrder(null).toArray()));
 		System.out.println("inOrder+Recursion"+Arrays.toString(t.inOrderRecursion(null).toArray()));
 		System.out.println("inOrder+NonRecursion"+Arrays.toString(t.inOrderNonRecursion(null).toArray()));
 		System.out.println("postOrder+Recursion"+Arrays.toString(t.postOrderTraverse(null).toArray()));
@@ -104,34 +95,6 @@ public class MyBinaryTreeTest {
 		assertEquals("A", t.lowestPublicParent("D", "E"));
 	}
 
-	@Test
-	public void testPreOrderTraverse() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testPreOrderNonRecursion() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testInOrderRecursion() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testInOrderNonRecursion() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testPostOrderTraverse() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testPostOrderNonRecursion() {
-		fail("Not yet implemented");
-	}
+	
 
 }

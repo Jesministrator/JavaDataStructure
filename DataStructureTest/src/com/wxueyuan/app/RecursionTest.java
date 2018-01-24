@@ -11,15 +11,11 @@ public class RecursionTest {
 		//System.out.println("------------------");
 		//hanoi(4);
 		//System.out.println(fibonacci(12));
-		long time = System.currentTimeMillis();
-		System.out.println(recFibonacci(45));
-		long endTime = System.currentTimeMillis();
-		System.out.println(endTime-time);
 		
-		long time2 = System.currentTimeMillis();
-		System.out.println(fibonacci(45));
-		long endTime2 = System.currentTimeMillis();
-		System.out.println(endTime2-time2);
+		recFibonacci(5);
+		
+		
+	
 	}
 	public  static int factorial(int arg) {
 		if(arg <0 ) throw new IllegalArgumentException("invalid argument");
@@ -52,8 +48,10 @@ public class RecursionTest {
 	
 	public static int recFibonacci (int arg) {
 		if(arg <0 ) throw new IllegalArgumentException("invalid argument");
+		System.out.println("正在执行Fibonacci("+arg+")");
 		if(arg == 0) return 0;
 		if(arg == 1) return 1;
+		
 		return recFibonacci(arg-1)+recFibonacci(arg-2);
 	}
 	
