@@ -52,7 +52,6 @@ public class MyBinaySortTree<E extends Comparable<E>> {
 						current.left = newBSTNode;
 						break;
 					}
-						
 					else
 						current = current.left;
 				}else if(cmp>0) {
@@ -69,13 +68,73 @@ public class MyBinaySortTree<E extends Comparable<E>> {
 				}
 			}
 		}
+		size++;
 		return true;
 	}
 	
 	public boolean remove(E v) {
 		BSTNode parent = root;
 		BSTNode current = root;
-		return true;
+		boolean isLeftChild = true;
+		while(current!=null){
+			int cmp = v.compareTo(current.data);
+			if(cmp==0){
+				
+				if(current.left==null && current.right==null){
+					if(current==root){
+						root=null;
+					}else{
+						if(isLeftChild)
+							parent.left=null;
+						else
+							parent.right = null;
+					}
+				}else if(current.left!=null && current.right==null){
+					if(current==root){
+						root = current.left;
+					}else{
+						parent.left = current.left;
+					}
+				}else if(current.left==null && current.right!=null){
+					if(current==root){
+						root = current.right;
+					}else{
+						parent.right = current.right;
+					}
+				}else{
+					BSTNode n = current.left;
+					BSTNode replaceParent=n;
+					while(n.right!=null){
+						replaceParent = n;
+						n=n.right;
+					}
+					if(n!=current.left)
+						n.left=current.left;
+					replaceParent.right=null;
+					if(current==root){
+						root = n;
+					}else{
+						if(isLeftChild)
+							parent.left = n;
+						else
+							parent.right = n;
+					}
+					n.right = current.right;
+				}
+				current = null;
+				size--;
+				return true;
+			}else if(cmp<0){
+				isLeftChild = true;
+				parent = current;
+				current = current.left;
+			}else{
+				isLeftChild = false;
+				parent = current;
+				current = current.right;
+			}
+		}
+		return false;
 	}
 	
 	public List<E> preOrder(){
