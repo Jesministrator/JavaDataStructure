@@ -496,7 +496,6 @@ public class MyBinaryTree<E> {
         }
         return list;
     }
-
     private void levelOrder(Node n, int level, List<E> list) {
         if (n == null || level < 1) {
             return;
@@ -505,9 +504,7 @@ public class MyBinaryTree<E> {
             list.add(n.data);
             return;
         }
-        // 左子树
         levelOrder(n.left, level - 1,list);
-        // 右子树
         levelOrder(n.right, level - 1,list);
     }
 	
@@ -522,6 +519,44 @@ public class MyBinaryTree<E> {
             if(temp.left!=null) q.add(temp.left);  
             if(temp.right!=null) q.add(temp.right);  
         } 
+		return list;
+	}
+	
+	public List<E> levelOrderZigzag(E currentValue){
+		List<E> list = new ArrayList<>();
+		Node current = getNodeByValue(currentValue);
+		if(current == null) return list;
+		int level=1;
+		Stack<Node> stack = new Stack<>();
+		stack.push(current);
+		list.add(current.data);
+		while(!stack.isEmpty()) {
+			Stack<Node> newStack = new Stack<>();
+			while(!stack.isEmpty()) {
+				Node n = stack.pop();
+				if(level%2==0) {
+					if(n.left!=null) {
+						newStack.push(n.left);
+						list.add(n.left.data);
+					}
+					if(n.right!=null) {
+						newStack.push(n.right);
+						list.add(n.right.data);
+					}
+				}else {
+					if(n.right!=null) {
+						newStack.push(n.right);
+						list.add(n.right.data);
+					}
+					if(n.left!=null) {
+						newStack.push(n.left);
+						list.add(n.left.data);
+					}
+				}
+			}
+			level++;
+			stack = newStack;
+		}
 		return list;
 	}
 	

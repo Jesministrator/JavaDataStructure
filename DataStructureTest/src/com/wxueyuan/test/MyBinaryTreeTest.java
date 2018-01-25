@@ -97,6 +97,9 @@ public class MyBinaryTreeTest {
 		assertEquals("D", t.lowestPublicParent("G", "H"));
 		assertEquals("C", t.lowestPublicParent("E", "F"));
 		assertEquals("A", t.lowestPublicParent("D", "E"));
+		
+		assertEquals("[A, C, B, D, E, F, I, H, G]",Arrays.toString(t.levelOrderZigzag(null).toArray()));
+		System.out.println(Arrays.toString(t.levelOrderZigzag(null).toArray()));
 	}
 
 	
