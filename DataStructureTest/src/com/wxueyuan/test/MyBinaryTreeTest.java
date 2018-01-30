@@ -7,12 +7,37 @@ import java.util.Arrays;
 import org.junit.Test;
 
 import com.wxueyuan.DataStructure.Child;
-import com.wxueyuan.DataStructure.MyBinaryTree;
+import com.wxueyuan.dailyPractice.MyBinaryTree;
 
 public class MyBinaryTreeTest {
 
-
-
+	
+	@Test
+	public void testTraversal(){
+		MyBinaryTree<String> t = new MyBinaryTree<>();
+		t.insert(null, "A", null);
+		t.insert("A", "B", Child.LEFT);
+		t.insert("A", "C", Child.RIGHT);
+		t.insert("B", "D", Child.LEFT);
+		t.insert("D", "G", Child.LEFT);
+		t.insert("D", "H", Child.RIGHT);
+		t.insert("C", "E", Child.LEFT);
+		t.insert("C", "F", Child.RIGHT);
+		t.insert("E", "I", Child.RIGHT);
+		assertEquals(Arrays.toString(t.preTraversalRecursion(null).toArray()), Arrays.toString(t.preTraversalNonRecursion(null).toArray()));
+		assertEquals(Arrays.toString(t.preTraversalRecursion(null).toArray()), Arrays.toString(t.preTraversalMoris(null).toArray()));
+		
+		assertEquals(Arrays.toString(t.inTraversalRecursion(null).toArray()), Arrays.toString(t.inTraversalNonRecursion(null).toArray()));
+		assertEquals(Arrays.toString(t.inTraversalRecursion(null).toArray()), Arrays.toString(t.inTraversalMoris(null).toArray()));
+		assertEquals(Arrays.toString(t.inTraversalNonRecursion(null).toArray()), Arrays.toString(t.inTraversalMoris(null).toArray()));
+		
+		assertEquals(Arrays.toString(t.postTraversalRecursion(null).toArray()), Arrays.toString(t.postTraversalNonRecursion(null).toArray()));
+		assertEquals(Arrays.toString(t.postTraversalRecursion(null).toArray()), Arrays.toString(t.postTraversalMoris(null).toArray()));
+		
+		assertArrayEquals(t.levelTraversalRecursion(null).toArray(), t.levelTraversalNonRecursion(null).toArray());
+		System.out.println(Arrays.toString(t.levelTraversalZigZag(null).toArray()));
+	}
+	
 	@Test
 	public void testContains() {
 		MyBinaryTree<String> t = new MyBinaryTree<>();
